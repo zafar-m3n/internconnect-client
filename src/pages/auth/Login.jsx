@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { showLoading, hideLoading } from "../redux/features/alertSlice";
+import { showLoading, hideLoading } from "@/redux/features/alertSlice";
 import { message } from "antd";
 
 const Login = () => {

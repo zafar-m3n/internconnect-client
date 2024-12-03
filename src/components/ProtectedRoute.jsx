@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "./../redux/features/alertSlice";
-import { setUser } from "./../redux/features/userSlice";
-import API from "./../services";
+import { hideLoading, showLoading } from "@/redux/features/alertSlice";
+import { setUser } from "@/redux/features/userSlice";
+import API from "@/services/index";
 
 export default function ProtectedRoute({ children }) {
   const dispatch = useDispatch();
