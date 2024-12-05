@@ -90,9 +90,8 @@ const Login = () => {
 
       <footer className="bg-blue-900 text-center text-blue-100 py-4">
         <p className="text-lg font-semibold">
-          All rights reserved 2024 | APIIT ICT Department | E - it@apiit.lk | T
-          - Colombo City Campus 0117675120/123 , Law School 0117675216 | W -
-          www.apiit.lk
+          All Rights Reserved 2024 &copy; Asia Pacific Institute of Information
+          Technology (APIIT)
         </p>
       </footer>
     </div>
