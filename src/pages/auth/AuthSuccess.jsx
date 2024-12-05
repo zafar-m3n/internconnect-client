@@ -7,24 +7,19 @@ const AuthSuccess = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      const query = new URLSearchParams(location.search);
-      const token = query.get("token");
+    const query = new URLSearchParams(location.search);
+    const token = query.get("token");
 
-      if (token) {
-        localStorage.setItem("token", token);
-        message.destroy();
-        message.success("Login Successful");
-        navigate("/");
-      } else {
-        navigate("/auth/login", {
-          state: { error: "Authentication failed. Please try again." },
-        });
-      }
-    }, 2000);
-
-    // Cleanup timeout on component unmount
-    return () => clearTimeout(timeout);
+    if (token) {
+      localStorage.setItem("token", token);
+      message.destroy();
+      message.success("Login Successful");
+      navigate("/");
+    } else {
+      navigate("/auth/login", {
+        state: { error: "Authentication failed. Please try again." },
+      });
+    }
   }, [location, navigate]);
 
   return (
