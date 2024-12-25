@@ -6,8 +6,15 @@ const getUserData = async (params = {}) => {
   });
 };
 
+const updateUser = async (params = {}) => {
+  return await instance.client.patch("api/v1/user/update", params, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
 const privateAPI = {
   getUserData,
+  updateUser,
 };
 
 export default privateAPI;

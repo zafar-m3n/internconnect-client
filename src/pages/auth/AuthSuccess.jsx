@@ -1,10 +1,41 @@
 import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import { message } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "@/redux/features/alertSlice";
+import { setUser } from "@/redux/features/userSlice";
+import API from "@/services/index";
 
 const AuthSuccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
+  const getUser = async () => {
+    try {
+      dispatch(showLoading());
+      const response = await API.private.getUserData({
+        token: localStorage.getItem("token"),
+      });
+      dispatch(hideLoading());
+      if (response.data.success) {
+        dispatch(setUser(response.data.data));
+        if (response.data.data.batchCode === "CBXXXXXX") {
+          navigate("/batch/selection");
+        } else {
+          navigate("/");
+        }
+      } else {
+        <Navigate to="/auth/login" />;
+        localStorage.clear();
+      }
+    } catch (error) {
+      localStorage.clear();
+      dispatch(hideLoading());
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -12,9 +43,12 @@ const AuthSuccess = () => {
 
     if (token) {
       localStorage.setItem("token", token);
+
       message.destroy();
       message.success("Login Successful");
-      navigate("/");
+      if (!user) {
+        getUser();
+      }
     } else {
       navigate("/auth/login", {
         state: { error: "Authentication failed. Please try again." },
