@@ -10,9 +10,7 @@ const Login = () => {
   const performLogin = async () => {
     try {
       dispatch(showLoading());
-      window.location.href = `${
-        import.meta.env.VITE_INTERNCONNECT_API_BASE_URL
-      }/api/v1/auth/microsoft`;
+      window.location.href = `${import.meta.env.VITE_INTERNCONNECT_API_BASE_URL}/api/v1/auth/microsoft`;
       dispatch(hideLoading());
     } catch (error) {
       dispatch(hideLoading());
@@ -22,78 +20,45 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="bg-blue-900 text-center text-blue-100 py-2 px-8 flex items-center space-x-4">
-        <img src={Logo} alt="logo" className="h-12" />
-        <h1 className="text-2xl font-bold">APIIT InternConnect</h1>
-      </header>
+    <div className="flex flex-col md:flex-row min-h-screen">
+      <div className="w-1/2 bg-blue-50 h-screen flex flex-col justify-start items-start p-10">
+        <img src={Logo} alt="logo" className="h-32 mb-6" />
+        <h1 className="text-3xl font-bold text-blue-900 mb-4">InternConnect</h1>
+        <p className="text-lg text-gray-700 max-w-xl">
+          Your one-stop platform for managing internships, connecting with opportunities, and enhancing your learning
+          experience.
+        </p>
+      </div>
+      <div className="w-1/2 bg-slate-50 h-screen flex flex-col justify-center items-center">
+        <div className="bg-white shadow-sm rounded-lg w-[30rem] p-6">
+          <h2 className="text-2xl font-bold text-center text-blue-900">Welcome</h2>
+          <p className="text-center text-gray-400 mb-4">Login with your student email to continue to InternConnect.</p>
 
-      <main
-        className="flex flex-col flex-grow justify-center items-center bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url("/images/internship.jpg")' }}
-      >
-        <div className="bg-blue-100 bg-opacity-90 w-4/5 lg:w-2/3 xl:w-1/2 rounded-lg p-6 mb-6 font-semibold text-blue-900 text-center">
-          <p>
-            <strong>Dear Students,</strong>
-          </p>
-          <p>
-            Click on "STUDENTS’ OFFICE 365 EDUCATION LOGIN" button to log in to
-            the LMS.
-          </p>
-          <p>
-            If you cannot remember the password, go to&nbsp;
-            <a
-              href="https://www.office.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600"
-            >
-              www.office.com
-            </a>
-            &nbsp;and get it recovered with the "FORGOT PASSWORD" option.
-          </p>
-          <p>Please use the chat window to contact ICT department.</p>
-        </div>
+          <div className="bg-gray-100/15 text-gray-600 rounded text-sm p-4 space-y-2">
+            <p>Click on "STUDENTS' OFFICE 365 EDUCATION LOGIN" to log in to LMS.</p>
+            <p>
+              If you cannot remember the password, go to{" "}
+              <a
+                href="https://www.office.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                www.office.com
+              </a>{" "}
+              and use the "FORGOT PASSWORD" option.
+            </p>
+            <p>Ensure cookies are enabled in your browser.</p>
+          </div>
 
-        <div className="bg-blue-100 bg-opacity-90 w-4/5 lg:w-2/3 xl:w-1/2 rounded-lg p-6 mb-6 font-semibold text-blue-900">
-          <p>Cookies must be enabled in your browser</p>
-          <p>Log into your InternConnect account via:</p>
           <button
             onClick={performLogin}
-            className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 flex items-center justify-center mx-auto my-4 transition duration-150"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full mt-4"
           >
-            <img
-              src="/images/office_logo.png"
-              alt="Office Logo"
-              className="mr-3"
-            />
-            MICROSOFT OFFICE 365 LOGIN
+            STUDENTS' OFFICE 365 EDUCATION LOGIN
           </button>
         </div>
-
-        <div className="bg-blue-100 bg-opacity-90 w-4/5 lg:w-2/3 xl:w-1/2 rounded-lg p-6 mb-6 font-semibold text-blue-900">
-          <h3 className="text-lg font-light">Is this your first time here?</h3>
-          <p>
-            Students may get their password by logging in to&nbsp;
-            <a
-              href="https://www.office.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600"
-            >
-              www.office.com
-            </a>
-            .
-          </p>
-        </div>
-      </main>
-
-      <footer className="bg-blue-900 text-center text-blue-100 py-4">
-        <p className="text-lg font-semibold">
-          All Rights Reserved 2024 &copy; Asia Pacific Institute of Information
-          Technology (APIIT)
-        </p>
-      </footer>
+      </div>
     </div>
   );
 };
