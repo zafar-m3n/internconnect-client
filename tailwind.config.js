@@ -7,6 +7,7 @@ export default {
         montserrat: ["Montserrat", "sans-serif"],
         noto: ["Noto Sans", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
+        nunito: ["Nunito", "sans-serif"],
       },
     },
   },
