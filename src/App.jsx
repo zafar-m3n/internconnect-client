@@ -6,7 +6,7 @@ import AuthSuccess from "@/pages/auth/AuthSuccess";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import PublicRoute from "@/components/PublicRoute";
 import { useSelector } from "react-redux";
-import Spinner from "@/components/Spinner";
+import Loading from "@/components/Loading";
 import BatchSelection from "@/pages/auth/BatchSelection";
 
 const App = () => {
@@ -15,7 +15,7 @@ const App = () => {
   return (
     <BrowserRouter>
       {loading ? (
-        <Spinner />
+        <Loading />
       ) : (
         <Routes>
           <Route
