@@ -5,9 +5,10 @@ import Login from "@/pages/auth/Login";
 import AuthSuccess from "@/pages/auth/AuthSuccess";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import PublicRoute from "@/components/PublicRoute";
+import DefaultLayout from "@/layouts/DefaultLayout";
+import BatchSelection from "@/pages/auth/BatchSelection";
 import { useSelector } from "react-redux";
 import Loading from "@/components/Loading";
-import BatchSelection from "@/pages/auth/BatchSelection";
 
 const App = () => {
   const { loading } = useSelector((state) => state.alerts);
@@ -19,13 +20,15 @@ const App = () => {
       ) : (
         <Routes>
           <Route
-            path="/"
             element={
               <ProtectedRoute>
-                <HomePage />
+                <DefaultLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="/" element={<HomePage />} />
+          </Route>
+
           <Route
             path="/auth/login"
             element={
