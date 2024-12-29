@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { message } from "antd";
 import { NavLink, Outlet, useLocation, useNavigate, Link } from "react-router-dom";
 import { formatName } from "@/utils/formatName";
+import { formatPath } from "@/utils/formatPath";
 import { adminMenu, studentMenu } from "@/data/data";
 import Icon from "@/components/ui/Icon";
 
@@ -103,7 +104,9 @@ const DefaultLayout = () => {
 
       <div className="flex flex-col flex-1">
         <header className="border-b px-4 py-5 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">{activeMenuItem ? activeMenuItem.name : "Dashboard"}</h2>
+          <h2 className="text-2xl font-bold capitalize">
+            {activeMenuItem ? activeMenuItem.name : formatPath(location.pathname)}
+          </h2>
           <div className="relative">
             <div className="cursor-pointer" onClick={() => setIsPopoverVisible(!isPopoverVisible)}>
               <Icon icon="heroicons:bell" className="w-10 h-10 p-2 rounded-full bg-white" />

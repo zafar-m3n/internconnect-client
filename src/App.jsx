@@ -12,6 +12,7 @@ import Loading from "@/components/Loading";
 import Internships from "@/pages/internships/index";
 import Notifications from "@/pages/notifications/index";
 import Profile from "@/pages/profile/index";
+import CVUpload from "@/pages/cv-upload/index";
 
 const App = () => {
   const { loading } = useSelector((state) => state.alerts);
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="/internships" element={<Internships />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/cv/upload" element={<CVUpload />} />
           </Route>
 
           <Route

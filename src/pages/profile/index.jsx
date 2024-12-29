@@ -5,6 +5,7 @@ import { formatCB } from "@/utils/formatCB";
 import { useSelector } from "react-redux";
 import { message } from "antd";
 import API from "@/services";
+import Button from "@/components/ui/Button";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
@@ -33,6 +34,10 @@ const Profile = () => {
     getCV();
   }, []);
 
+  const onClick = () => {
+    navigate("/cv/upload");
+  };
+
   return (
     <div className="grid grid-cols-12 grid-rows-2 gap-6">
       <section className="col-span-4 bg-white rounded shadow p-6">
@@ -41,6 +46,9 @@ const Profile = () => {
           <div>
             <h4 className="text-xl font-bold text-blue-950">{formatName(user?.name)}</h4>
             <p className="text-blue-700">{formatCB(user?.email)}</p>
+            <Button size="sm" variant="outline" className="mt-4" onClick={onClick}>
+              Upload CV
+            </Button>
           </div>
         </div>
       </section>

@@ -12,6 +12,7 @@ const Button = ({
   icon = null,
   iconPosition = "left",
   type = "button",
+  className = "",
 }) => {
   // Tailwind size classes
   const sizeClasses = {
@@ -45,7 +46,7 @@ const Button = ({
       type={type}
       disabled={disabled || loading}
       onClick={onClick}
-      className={`inline-flex items-center justify-center border font-medium rounded-md transition duration-300 ${
+      className={`${className} inline-flex items-center justify-center border font-medium rounded-md transition duration-300 ${
         variant === "outline" ? outlineClasses[color] : colorClasses[color]
       } ${sizeClasses[size]} ${
         disabled
