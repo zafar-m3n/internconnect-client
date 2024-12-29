@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatName } from "@/utils/formatName";
 import { formatCB } from "@/utils/formatCB";
-import { useSelector } from "react-redux";
 import { message } from "antd";
 import API from "@/services";
 import Button from "@/components/ui/Button";
 
 const Profile = () => {
-  const { user } = useSelector((state) => state.user);
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const [cv, setCv] = useState(null);
 
@@ -25,7 +24,7 @@ const Profile = () => {
         setCv(response.data.data);
       }
     } catch (error) {
-      console.error("Error fetching CV:", error.response);
+      console.error("Error fetching CV:", error);
       message.error("An error occurred while fetching the CV.");
     }
   };
@@ -45,7 +44,9 @@ const Profile = () => {
           <img src={user?.profilePic} alt="User Profile Pic" className="w-24 h-24 object-cover rounded-full mb-4" />
           <div>
             <h4 className="text-xl font-bold text-blue-950">{formatName(user?.name)}</h4>
-            <p className="text-blue-700 font-medium">{formatCB(user?.email)} | {user.batchCode}</p>
+            <p className="text-blue-700 font-medium">
+              {formatCB(user?.email)} | {user.batchCode}
+            </p>
             <Button size="sm" variant="outline" className="mt-4" onClick={onClick}>
               Upload CV
             </Button>

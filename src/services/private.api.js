@@ -12,9 +12,16 @@ const updateUser = async (params = {}) => {
   });
 };
 
+const getCV = async () => {
+  return await instance.client.get("api/v1/cv/cv", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
 const privateAPI = {
   getUserData,
   updateUser,
+  getCV,
 };
 
 export default privateAPI;
