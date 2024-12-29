@@ -45,7 +45,7 @@ const Profile = () => {
           <img src={user?.profilePic} alt="User Profile Pic" className="w-24 h-24 object-cover rounded-full mb-4" />
           <div>
             <h4 className="text-xl font-bold text-blue-950">{formatName(user?.name)}</h4>
-            <p className="text-blue-700">{formatCB(user?.email)}</p>
+            <p className="text-blue-700 font-medium">{formatCB(user?.email)} | {user.batchCode}</p>
             <Button size="sm" variant="outline" className="mt-4" onClick={onClick}>
               Upload CV
             </Button>
