@@ -21,7 +21,10 @@ const AuthSuccess = () => {
       dispatch(hideLoading());
       if (response.data.success) {
         dispatch(setUser(response.data.data));
-        if (response.data.data.batchCode === "CBXXXXXX") {
+        const userData = response.data.data;
+
+        // Check if the user is an admin
+        if (!userData.isAdmin && userData.batchCode === "CBXXXXXX") {
           navigate("/batch/selection");
         } else {
           navigate("/");

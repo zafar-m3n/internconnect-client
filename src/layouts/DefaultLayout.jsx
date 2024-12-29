@@ -16,6 +16,12 @@ const DefaultLayout = () => {
   const menu = user?.isAdmin ? adminMenu : studentMenu;
   const activeMenuItem = menu.find((item) => item.path === location.pathname);
 
+  const handleLogout = () => {
+    message.success("Logged out successfully");
+    localStorage.clear();
+    navigate("/auth/login");
+  };
+
   return (
     <div className="flex h-screen bg-[#f0f5f9]">
       <div
@@ -76,7 +82,11 @@ const DefaultLayout = () => {
                   : "hidden"
               }`}
             >
-              <NavLink to="/auth/login" className="flex items-center space-x-2 mx-2 py-2 border-b border-slate-50/30">
+              <NavLink
+                to="/auth/login"
+                className="flex items-center space-x-2 mx-2 py-2 border-b border-slate-50/30"
+                onClick={handleLogout}
+              >
                 <Icon icon="heroicons:arrow-left-end-on-rectangle" className="w-6 h-6" />
                 <span>Logout</span>
               </NavLink>
