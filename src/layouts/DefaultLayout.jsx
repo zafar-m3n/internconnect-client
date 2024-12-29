@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { message } from "antd";
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate, Link } from "react-router-dom";
 import { formatName } from "@/utils/formatName";
 import { adminMenu, studentMenu } from "@/data/data";
 import Icon from "@/components/ui/Icon";
@@ -8,6 +8,7 @@ import Icon from "@/components/ui/Icon";
 const DefaultLayout = () => {
   const [isSidebarHovered, setIsSidebarHovered] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isPopoverVisible, setIsPopoverVisible] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
@@ -21,6 +22,12 @@ const DefaultLayout = () => {
     navigate("/auth/login");
   };
 
+  const notifications = JSON.parse(user?.notifications);
+
+  const handleNotificationClick = (path) => {
+    navigate(path);
+    setIsPopoverVisible(false);
+  };
   return (
     <div className="flex h-screen bg-[#f0f5f9]">
       <div
@@ -98,11 +105,36 @@ const DefaultLayout = () => {
         <header className="border-b px-4 py-5 flex items-center justify-between">
           <h2 className="text-2xl font-bold">{activeMenuItem ? activeMenuItem.name : "Dashboard"}</h2>
           <div className="relative">
-            <Icon icon="heroicons:bell" className="w-10 h-10 p-2 rounded-full bg-white" />
-            {JSON.parse(user.notifications).length >= 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {JSON.parse(user.notifications).length}
-              </span>
+            <div className="cursor-pointer" onClick={() => setIsPopoverVisible(!isPopoverVisible)}>
+              <Icon icon="heroicons:bell" className="w-10 h-10 p-2 rounded-full bg-white" />
+              {notifications.length >= 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {notifications.length}
+                </span>
+              )}
+            </div>
+            {isPopoverVisible && (
+              <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-72 p-2">
+                <div className="absolute -top-2 right-4 w-4 h-4 bg-white transform rotate-45 border-l border-t"></div>
+                <h2 className="text-center text-xl text-blue-700 font-bold mb-2">Notifications</h2>
+                {notifications && notifications.length > 0 ? (
+                  notifications.slice(0, 3).map((notification, index) => (
+                    <div
+                      key={index}
+                      className="p-2 border-b border-l-4 border-l-blue-400 cursor-pointer rounded my-4"
+                      onClick={() => handleNotificationClick(notification.path)}
+                    >
+                      <p className="font-bold text-md uppercase">{notification.type}</p>
+                      <p className="text-sm">{notification.message}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center">You have no notifications</p>
+                )}
+                <Link to="/notifications" className="hover:underline text-blue-700 text-center mt-2 block">
+                  See all
+                </Link>
+              </div>
             )}
           </div>
         </header>
