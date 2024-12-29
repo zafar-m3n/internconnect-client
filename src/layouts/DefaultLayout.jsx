@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { message } from "antd";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { formatName } from "@/utils/formatName";
 import { adminMenu, studentMenu } from "@/data/data";
 import Icon from "@/components/ui/Icon";
@@ -9,7 +8,7 @@ import Icon from "@/components/ui/Icon";
 const DefaultLayout = () => {
   const [isSidebarHovered, setIsSidebarHovered] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const { user } = useSelector((state) => state.user);
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -98,7 +97,14 @@ const DefaultLayout = () => {
       <div className="flex flex-col flex-1">
         <header className="border-b px-4 py-5 flex items-center justify-between">
           <h2 className="text-2xl font-bold">{activeMenuItem ? activeMenuItem.name : "Dashboard"}</h2>
-          <Icon icon="heroicons:bell" className="w-10 h-10 p-2 rounded-full bg-white" />
+          <div className="relative">
+            <Icon icon="heroicons:bell" className="w-10 h-10 p-2 rounded-full bg-white" />
+            {JSON.parse(user.notifications).length >= 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {JSON.parse(user.notifications).length}
+              </span>
+            )}
+          </div>
         </header>
         <main className="flex-1 p-4 overflow-y-auto">
           <Outlet />
