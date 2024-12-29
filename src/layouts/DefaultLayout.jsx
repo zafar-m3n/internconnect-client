@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { message } from "antd";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { formatName } from "@/utils/formatName";
 import { adminMenu, studentMenu } from "@/data/data";
@@ -7,19 +8,26 @@ import Icon from "@/components/ui/Icon";
 
 const DefaultLayout = () => {
   const [isSidebarHovered, setIsSidebarHovered] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
+  const location = useLocation();
   const menu = user?.isAdmin ? adminMenu : studentMenu;
+  const activeMenuItem = menu.find((item) => item.path === location.pathname);
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
+    <div className="flex h-screen bg-[#f0f5f9]">
       <div
-        className={`bg-blue-950 text-white transition-all duration-300 ${isSidebarHovered ? "w-64" : "w-16"}`}
+        className={`bg-blue-950 text-white transition-all duration-300 flex flex-col ${
+          isSidebarHovered ? "w-64" : "w-16"
+        }`}
         onMouseEnter={() => setIsSidebarHovered(true)}
-        onMouseLeave={() => setIsSidebarHovered(false)}
+        onMouseLeave={() => {
+          setIsSidebarHovered(false);
+          setIsProfileDropdownOpen(false);
+        }}
       >
-        {/* Logo and Organization Name */}
         <div className="flex items-center h-20 px-4 border-b border-blue-900">
           <img src="/favicon.png" alt="logo" className="h-12 w-12 object-cover rounded-md" />
           {isSidebarHovered && (
@@ -29,13 +37,8 @@ const DefaultLayout = () => {
             </span>
           )}
         </div>
-
-        {/* Menu */}
-        <div className="flex flex-col h-full px-2">
-          <button className="p-4 focus:outline-none">
-            <Icon icon="heroicons:menu" className="w-6 h-6" />
-          </button>
-          <nav className="mt-4 space-y-2">
+        <div className="flex flex-1 flex-col">
+          <nav className="mt-4 space-y-2 px-2">
             {menu.map((item) => (
               <NavLink
                 to={item.path}
@@ -52,17 +55,40 @@ const DefaultLayout = () => {
             ))}
           </nav>
         </div>
+        <div className="border-t border-blue-900 px-4 py-2">
+          <div
+            className="flex items-center cursor-pointer"
+            onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+          >
+            <img src={user?.profilePic} alt={user?.name} className="h-8 w-8 object-cover rounded-full" />
+            {isSidebarHovered && (
+              <div className="flex items-center space-x-2">
+                <span className="ms-3 font-semibold">{formatName(user?.name)}</span>
+                <Icon icon="heroicons:chevron-up" className="w-5 h-5" />
+              </div>
+            )}
+          </div>
+          {isProfileDropdownOpen && isSidebarHovered && (
+            <div
+              className={`${
+                isProfileDropdownOpen
+                  ? "absolute bottom-20 left-24 h-20 rounded border border-slate-50/30 shadow-md w-40 mt-2 space-y-2"
+                  : "hidden"
+              }`}
+            >
+              <NavLink to="/auth/login" className="flex items-center space-x-2 mx-2 py-2 border-b border-slate-50/30">
+                <Icon icon="heroicons:arrow-left-end-on-rectangle" className="w-6 h-6" />
+                <span>Logout</span>
+              </NavLink>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex flex-col flex-1">
-        {/* Header */}
-        <header className="bg-blue-900 text-white shadow p-4 flex items-center justify-end">
-          <div className="flex items-center space-x-4">
-            <Icon icon="heroicons:bell" className="w-10 h-10 bg-blue-800 p-2 rounded-md text-white" />
-            <span className="text-lg font-semibold">{formatName(user?.name)}</span>
-            <img src={user?.profilePic} alt={user?.name} className="h-12 w-12 object-cover rounded-full" />
-          </div>
+        <header className="border-b px-4 py-5 flex items-center justify-between">
+          <h2 className="text-2xl font-bold">{activeMenuItem ? activeMenuItem.name : "Dashboard"}</h2>
+          <Icon icon="heroicons:bell" className="w-10 h-10 p-2 rounded-full bg-white" />
         </header>
         <main className="flex-1 p-4 overflow-y-auto">
           <Outlet />

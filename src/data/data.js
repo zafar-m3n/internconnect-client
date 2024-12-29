@@ -1,6 +1,6 @@
 export const studentMenu = [
   {
-    name: "Home",
+    name: "Dashboard",
     path: "/",
     icon: "heroicons:home",
   },
@@ -23,7 +23,7 @@ export const studentMenu = [
 
 export const adminMenu = [
   {
-    name: "Home",
+    name: "Dashboard",
     path: "/",
     icon: "heroicons:home",
   },
