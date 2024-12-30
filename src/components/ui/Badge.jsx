@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "@/components/ui/Icon";
 
-const Badge = ({ text, color = "blue", size = "md", icon = null, rounded = "rounded" }) => {
+const Badge = ({ text, color = "blue", size = "md", icon = null, rounded = "rounded", className }) => {
   const sizeClasses = {
     sm: "text-xs px-2 py-0.5",
     md: "text-sm px-3 py-1",
@@ -17,7 +17,7 @@ const Badge = ({ text, color = "blue", size = "md", icon = null, rounded = "roun
   };
 
   return (
-    <span className={`inline-flex items-center ${sizeClasses[size]} ${colorClasses[color]} ${rounded} font-medium`}>
+    <span className={`inline-flex items-center ${sizeClasses[size]} ${colorClasses[color]} ${rounded} font-medium ${className}`}>
       {icon && <Icon icon={icon} className="me-2 h-4 w-4" />}
       {text}
     </span>
