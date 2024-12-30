@@ -33,6 +33,11 @@ export const adminMenu = [
     icon: "heroicons:list-bullet",
   },
   {
+    name: "Notifications",
+    path: "/notifications",
+    icon: "heroicons:bell",
+  },
+  {
     name: "Student CVs",
     path: "/cvs",
     icon: "heroicons:document-text",
