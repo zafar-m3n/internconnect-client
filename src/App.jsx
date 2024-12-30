@@ -13,6 +13,8 @@ import Internships from "@/pages/internships/index";
 import Notifications from "@/pages/notifications/index";
 import Profile from "@/pages/profile/index";
 import CVUpload from "@/pages/cv-upload/index";
+import CVPage from "@/pages/cvs/index";
+import Reports from "@/pages/reports/index";
 
 const App = () => {
   const { loading } = useSelector((state) => state.alerts);
@@ -35,6 +37,8 @@ const App = () => {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/cv/upload" element={<CVUpload />} />
+            <Route path="/cvs" element={<CVPage />} />
+            <Route path="/reports" element={<Reports />} />
           </Route>
 
           <Route

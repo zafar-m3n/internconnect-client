@@ -37,7 +37,7 @@ const CVUpload = () => {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },
-    data: { userId: user.id },
+    data: { userId: user.user.id },
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {

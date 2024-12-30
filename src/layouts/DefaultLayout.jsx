@@ -14,7 +14,7 @@ const DefaultLayout = () => {
   const navigate = useNavigate();
 
   const location = useLocation();
-  const menu = user?.isAdmin ? adminMenu : studentMenu;
+  const menu = user.user.isAdmin ? adminMenu : studentMenu;
   const activeMenuItem = menu.find((item) => item.path === location.pathname);
 
   const handleLogout = () => {
@@ -22,8 +22,6 @@ const DefaultLayout = () => {
     localStorage.clear();
     navigate("/auth/login");
   };
-
-  const notifications = JSON.parse(user?.notifications);
 
   const handleNotificationClick = (path) => {
     navigate(path);
@@ -73,10 +71,10 @@ const DefaultLayout = () => {
             className="flex items-center cursor-pointer"
             onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
           >
-            <img src={user?.profilePic} alt={user?.name} className="h-8 w-8 object-cover rounded-full" />
+            <img src={user.user.profilePic} alt={user.user.name} className="h-8 w-8 object-cover rounded-full" />
             {isSidebarHovered && (
               <div className="flex items-center space-x-2">
-                <span className="ms-3 font-semibold">{formatName(user?.name)}</span>
+                <span className="ms-3 font-semibold">{formatName(user.user.name)}</span>
                 <Icon icon="heroicons:chevron-up" className="w-5 h-5" />
               </div>
             )}
@@ -110,9 +108,9 @@ const DefaultLayout = () => {
           <div className="relative">
             <div className="cursor-pointer" onClick={() => setIsPopoverVisible(!isPopoverVisible)}>
               <Icon icon="heroicons:bell" className="w-10 h-10 p-2 rounded-full bg-white" />
-              {notifications.length >= 0 && (
+              {user.notifications.length >= 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {notifications.length}
+                  {user.notifications.length}
                 </span>
               )}
             </div>
@@ -120,8 +118,8 @@ const DefaultLayout = () => {
               <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-72 p-2">
                 <div className="absolute -top-2 right-4 w-4 h-4 bg-white transform rotate-45 border-l border-t"></div>
                 <h2 className="text-center text-xl text-blue-700 font-bold mb-2">Notifications</h2>
-                {notifications && notifications.length > 0 ? (
-                  notifications.slice(0, 3).map((notification, index) => (
+                {user.notifications && user.notifications.length > 0 ? (
+                  user.notifications.slice(0, 3).map((notification, index) => (
                     <div
                       key={index}
                       className="p-2 border-b border-l-4 border-l-blue-400 cursor-pointer rounded my-4"

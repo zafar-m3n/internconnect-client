@@ -42,11 +42,15 @@ const Profile = () => {
       <div className="flex flex-col w-2/5 space-y-6">
         <section className="bg-white rounded shadow p-6">
           <div className="flex space-x-4 items-center">
-            <img src={user?.profilePic} alt="User Profile Pic" className="w-24 h-24 object-cover rounded-full mb-4" />
+            <img
+              src={user.user.profilePic}
+              alt="User Profile Pic"
+              className="w-24 h-24 object-cover rounded-full mb-4"
+            />
             <div>
-              <h4 className="text-xl font-bold text-blue-950">{formatName(user?.name)}</h4>
+              <h4 className="text-xl font-bold text-blue-950">{formatName(user.user.name)}</h4>
               <p className="text-blue-700 font-medium">
-                {formatCB(user?.email)} | {user.batchCode}
+                {formatCB(user.user.email)} | {user.user.batchCode}
               </p>
               <Button size="sm" variant="outline" className="mt-4" onClick={onClick}>
                 {cv ? "Update CV" : "Upload CV"}
