@@ -18,10 +18,28 @@ const getCV = async () => {
   });
 };
 
+const markAllAsRead = async () => {
+  return await instance.client.put(
+    "/api/v1/user/notifications/read",
+    {},
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
+const deleteAllRead = async () => {
+  return await instance.client.delete("/api/v1/user/notifications/delete", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
 const privateAPI = {
   getUserData,
   updateUser,
   getCV,
+  markAllAsRead,
+  deleteAllRead,
 };
 
 export default privateAPI;

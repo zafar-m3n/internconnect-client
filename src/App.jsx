@@ -10,7 +10,6 @@ import BatchSelection from "@/pages/auth/BatchSelection";
 import { useSelector } from "react-redux";
 import Loading from "@/components/Loading";
 import Internships from "@/pages/internships/index";
-import Notifications from "@/pages/notifications/index";
 import Profile from "@/pages/profile/index";
 import CVUpload from "@/pages/cv-upload/index";
 import CVPage from "@/pages/cvs/index";
@@ -34,7 +33,6 @@ const App = () => {
           >
             <Route path="/" element={<HomePage />} />
             <Route path="/internships" element={<Internships />} />
-            <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/cv/upload" element={<CVUpload />} />
             <Route path="/cvs" element={<CVPage />} />

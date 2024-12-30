@@ -10,11 +10,6 @@ export const studentMenu = [
     icon: "heroicons:list-bullet",
   },
   {
-    name: "Notifications",
-    path: "/notifications",
-    icon: "heroicons:bell",
-  },
-  {
     name: "Profile",
     path: "/profile",
     icon: "heroicons:user",
@@ -31,11 +26,6 @@ export const adminMenu = [
     name: "Internships",
     path: "/internships",
     icon: "heroicons:list-bullet",
-  },
-  {
-    name: "Notifications",
-    path: "/notifications",
-    icon: "heroicons:bell",
   },
   {
     name: "Student CVs",

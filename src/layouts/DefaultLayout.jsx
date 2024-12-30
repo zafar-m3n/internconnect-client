@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { message } from "antd";
 import { NavLink, Outlet, useLocation, useNavigate, Link } from "react-router-dom";
 import { formatName } from "@/utils/formatName";
 import { formatPath } from "@/utils/formatPath";
 import { adminMenu, studentMenu } from "@/data/data";
 import Icon from "@/components/ui/Icon";
+import NotificationsPanel from "@/components/NotificationsPanel";
 
 const DefaultLayout = () => {
   const [isSidebarHovered, setIsSidebarHovered] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const [isPopoverVisible, setIsPopoverVisible] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
-  const navigate = useNavigate();
+  const [isNotificationPanelVisible, setIsNotificationPanelVisible] = useState(false);
+  const notificationPanelRef = useRef(null);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const sortedNotifications = (user.notifications || []).slice().sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+
+  const unreadNotifications = sortedNotifications.filter(
+    (notification) => notification.userNotifications[0]?.seenAt === null
+  );
+  const readNotifications = sortedNotifications.filter(
+    (notification) => notification.userNotifications[0]?.seenAt !== null
+  );
+  const navigate = useNavigate();
   const location = useLocation();
   const menu = user.user.isAdmin ? adminMenu : studentMenu;
   const activeMenuItem = menu.find((item) => item.path === location.pathname);
@@ -25,8 +37,27 @@ const DefaultLayout = () => {
 
   const handleNotificationClick = (path) => {
     navigate(path);
-    setIsPopoverVisible(false);
+    setIsNotificationPanelVisible(false);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationPanelRef.current && !notificationPanelRef.current.contains(event.target)) {
+        setIsNotificationPanelVisible(false);
+      }
+    };
+
+    if (isNotificationPanelVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isNotificationPanelVisible]);
+
   return (
     <div className="flex h-screen bg-[#f0f5f9]">
       <div
@@ -105,43 +136,40 @@ const DefaultLayout = () => {
           <h2 className="text-2xl font-bold capitalize">
             {activeMenuItem ? activeMenuItem.name : formatPath(location.pathname)}
           </h2>
-          <div className="relative">
-            <div className="cursor-pointer" onClick={() => setIsPopoverVisible(!isPopoverVisible)}>
+          <div>
+            <div className="cursor-pointer relative" onClick={() => setIsNotificationPanelVisible(true)}>
               <Icon icon="heroicons:bell" className="w-10 h-10 p-2 rounded-full bg-white" />
-              {user.notifications.length >= 0 && (
+              {user.notifications.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {user.notifications.length}
+                  {unreadNotifications.length}
                 </span>
               )}
             </div>
-            {isPopoverVisible && (
-              <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-72 p-2">
-                <div className="absolute -top-2 right-4 w-4 h-4 bg-white transform rotate-45 border-l border-t"></div>
-                <h2 className="text-center text-xl text-blue-700 font-bold mb-2">Notifications</h2>
-                {user.notifications && user.notifications.length > 0 ? (
-                  user.notifications.slice(0, 3).map((notification, index) => (
-                    <div
-                      key={index}
-                      className="p-2 border-b border-l-4 border-l-blue-400 cursor-pointer rounded my-4"
-                      onClick={() => handleNotificationClick(notification.path)}
-                    >
-                      <p className="font-bold text-md uppercase">{notification.type}</p>
-                      <p className="text-sm">{notification.message}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-center">You have no notifications</p>
-                )}
-                <Link to="/notifications" className="hover:underline text-blue-700 text-center mt-2 block">
-                  See all
-                </Link>
-              </div>
-            )}
           </div>
         </header>
         <main className="flex-1 p-4 overflow-y-auto">
           <Outlet />
         </main>
+
+        <div
+          ref={notificationPanelRef}
+          className={`fixed top-0 right-0 h-screen w-96 bg-white shadow-lg z-50 p-4 transform transition-transform duration-300 ease-in-out ${
+            isNotificationPanelVisible ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <button
+            className="absolute top-4 right-4 text-gray-600 hover:text-black"
+            onClick={() => setIsNotificationPanelVisible(false)}
+          >
+            <Icon icon="heroicons:x-mark" className="w-6 h-6" />
+          </button>
+          <NotificationsPanel
+            user={user}
+            handleNotificationClick={handleNotificationClick}
+            unreadNotifications={unreadNotifications}
+            readNotifications={readNotifications}
+          />
+        </div>
       </div>
     </div>
   );
