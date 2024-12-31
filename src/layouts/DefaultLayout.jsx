@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { message } from "antd";
-import { NavLink, Outlet, useLocation, useNavigate, Link } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { formatName } from "@/utils/formatName";
 import { formatPath } from "@/utils/formatPath";
 import { adminMenu, studentMenu } from "@/data/data";
@@ -13,7 +13,7 @@ const DefaultLayout = () => {
   const [isNotificationPanelVisible, setIsNotificationPanelVisible] = useState(false);
   const notificationPanelRef = useRef(null);
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  let user = JSON.parse(localStorage.getItem("user"));
   const sortedNotifications = (user.notifications || []).slice().sort((a, b) => {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });

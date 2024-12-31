@@ -3,8 +3,14 @@ import { message } from "antd";
 import { Tab } from "@headlessui/react";
 import API from "@/services/index";
 import { formatDateTime } from "@/utils/formatDateTime";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/features/userSlice";
+import { Navigate } from "react-router-dom";
+import Loading from "@/components/Loading";
 
 const NotificationsPanel = ({ user, handleNotificationClick, unreadNotifications, readNotifications }) => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Unread");
 
   const categories = {
@@ -12,15 +18,41 @@ const NotificationsPanel = ({ user, handleNotificationClick, unreadNotifications
     Read: readNotifications,
   };
 
+  const getUser = async () => {
+    try {
+      setLoading(true);
+      const response = await API.private.getUserData({
+        token: localStorage.getItem("token"),
+      });
+      setLoading(false);
+      if (response.data.success) {
+        const userData = response.data.data;
+        localStorage.setItem("user", JSON.stringify(userData));
+        user = JSON.parse(localStorage.getItem("user"));
+        dispatch(setUser(userData));
+      } else {
+        <Navigate to="/auth/login" />;
+        localStorage.clear();
+      }
+    } catch (error) {
+      setLoading(false);
+      localStorage.clear();
+    }
+  };
+
   const markAllAsRead = async () => {
     try {
+      setLoading(true);
       const response = await API.private.markAllAsRead();
+      setLoading(false);
       if (response.data.success) {
         message.success(response.data.message);
+        getUser();
       } else {
         message.error(response.data.message);
       }
     } catch (error) {
+      setLoading(false);
       console.error(error);
       message.error(error.message);
     }
@@ -28,13 +60,17 @@ const NotificationsPanel = ({ user, handleNotificationClick, unreadNotifications
 
   const deleteAllRead = async () => {
     try {
+      setLoading(true);
       const response = await API.private.deleteAllRead();
+      setLoading(false);
       if (response.data.success) {
         message.success(response.data.message);
+        getUser();
       } else {
         message.error(response.data.message);
       }
     } catch (error) {
+      setLoading(false);
       console.error(error);
       message.error(error.message);
     }
@@ -46,7 +82,7 @@ const NotificationsPanel = ({ user, handleNotificationClick, unreadNotifications
       <Tab.Group
         onChange={(index) => {
           const categoryKeys = Object.keys(categories);
-          setSelectedTab(categoryKeys[index]); // Update selectedTab based on tab change
+          setSelectedTab(categoryKeys[index]);
         }}
       >
         <Tab.List className="flex justify-between items-center">
@@ -78,20 +114,26 @@ const NotificationsPanel = ({ user, handleNotificationClick, unreadNotifications
         <Tab.Panels className="mt-4">
           {Object.entries(categories).map(([category, notifications], idx) => (
             <Tab.Panel key={idx}>
-              {notifications.length > 0 ? (
-                notifications.map((notification, index) => (
-                  <div
-                    key={index}
-                    className="p-2 border-b border-l-4 border-l-blue-400 cursor-pointer rounded my-4"
-                    onClick={() => handleNotificationClick(notification.path)}
-                  >
-                    <p className="font-bold text-md uppercase">{notification.title}</p>
-                    <p className="text-sm">{notification.message}</p>
-                    <p className="text-xs text-right text-gray-400">{formatDateTime(notification.createdAt)}</p>
-                  </div>
-                ))
+              {loading ? (
+                <Loading message="" />
               ) : (
-                <p className="text-center text-gray-500">No {category.toLowerCase()} notifications available</p>
+                <>
+                  {notifications.length > 0 ? (
+                    notifications.map((notification, index) => (
+                      <div
+                        key={index}
+                        className="p-2 border-b border-l-4 border-l-blue-400 cursor-pointer rounded my-4"
+                        onClick={() => handleNotificationClick(notification.path)}
+                      >
+                        <p className="font-bold text-md uppercase">{notification.title}</p>
+                        <p className="text-sm">{notification.message}</p>
+                        <p className="text-xs text-right text-gray-400">{formatDateTime(notification.createdAt)}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500">No {category.toLowerCase()} notifications available</p>
+                  )}
+                </>
               )}
             </Tab.Panel>
           ))}

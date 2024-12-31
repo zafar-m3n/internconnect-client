@@ -20,7 +20,6 @@ const AuthSuccess = () => {
       });
       dispatch(hideLoading());
       if (response.data.success) {
-        console.log(response.data.data);
         const userData = response.data.data;
         localStorage.setItem("user", JSON.stringify(userData));
         dispatch(setUser(userData));

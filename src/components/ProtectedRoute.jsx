@@ -9,8 +9,6 @@ export default function ProtectedRoute({ children }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
-  //getUser
-
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -20,7 +18,9 @@ export default function ProtectedRoute({ children }) {
         });
         dispatch(hideLoading());
         if (response.data.success) {
-          dispatch(setUser(response.data.data));
+          const userData = response.data.data;
+          localStorage.setItem("user", JSON.stringify(userData));
+          dispatch(setUser(userData));
         } else {
           <Navigate to="/auth/login" />;
           localStorage.clear();
