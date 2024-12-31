@@ -21,8 +21,8 @@ const Profile = () => {
   const getCV = async () => {
     try {
       const response = await API.private.getCV();
-      if (response.statusText === "OK") {
-        setCv(response.data);
+      if (response.data.success) {
+        setCv(response.data.userCV);
       }
     } catch (error) {
       message.error(error.response.data.message);

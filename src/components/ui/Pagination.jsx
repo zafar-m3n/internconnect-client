@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "@/components/ui/Icon";
 
-const Pagination = ({ currentPage, totalPages, onPageChange, className = "", text = true }) => {
+const Pagination = ({ currentPage, totalPages, onPageChange, className = "", text = false }) => {
   const getPageNumbers = () => {
     const pages = [];
     const startPage = 1;

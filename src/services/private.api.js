@@ -34,12 +34,49 @@ const deleteAllRead = async () => {
   });
 };
 
+const getAllCvs = async (page, limit, search = "", sortBy = "date", batchCode = null) => {
+  return await instance.client.get("api/v1/cv/admin/cvs", {
+    headers: instance.defaultHeaders(),
+    params: {
+      page,
+      limit,
+      search,
+      sortBy,
+      batchCode,
+    },
+  });
+};
+
+const approveCv = async (id) => {
+  return await instance.client.put(
+    `api/v1/cv/admin/${id}/approve`,
+    {},
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
+const rejectCv = async (id) => {
+  return await instance.client.put(
+    `api/v1/cv/admin/${id}/reject`,
+    {},
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
 const privateAPI = {
   getUserData,
   updateUser,
   getCV,
   markAllAsRead,
   deleteAllRead,
+
+  getAllCvs,
+  approveCv,
+  rejectCv,
 };
 
 export default privateAPI;
