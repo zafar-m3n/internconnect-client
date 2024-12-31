@@ -78,11 +78,40 @@ const CVPage = () => {
     setIsApproveModalOpen(false);
     setIsRejectModalOpen(false);
     setRejectReason("");
+    setSelectedCV(null);
   };
 
   const viewCv = (cv) => () => {
     const url = `${import.meta.env.VITE_INTERNCONNECT_API_BASE_URL}/${cv.path}`;
     window.open(url, "_blank");
+  };
+
+  const approveCV = (cv) => async () => {
+    try {
+      const response = await API.private.approveCv(cv.id);
+      if (response.data.success) {
+        message.success(response.data.message);
+        closeModals();
+        getAllCvs();
+      }
+    } catch (error) {
+      console.error(error);
+      message.error(error.response.data.message);
+    }
+  };
+
+  const rejectCV = (cv) => async () => {
+    try {
+      const response = await API.private.rejectCv(cv.id, rejectReason);
+      if (response.data.success) {
+        message.success(response.data.message);
+        closeModals();
+        getAllCvs();
+      }
+    } catch (error) {
+      console.error(error);
+      message.error(error.response.data.message);
+    }
   };
 
   const statusColors = {
@@ -191,7 +220,7 @@ const CVPage = () => {
           <Button color="light" size="sm" onClick={closeModals}>
             Cancel
           </Button>
-          <Button color="success" size="sm">
+          <Button color="success" size="sm" onClick={approveCV(selectedCV)}>
             Confirm
           </Button>
         </div>
@@ -216,7 +245,7 @@ const CVPage = () => {
           <Button color="light" size="sm" onClick={closeModals}>
             Cancel
           </Button>
-          <Button color="danger" size="sm" disabled={!rejectReason}>
+          <Button color="danger" size="sm" disabled={!rejectReason} onClick={rejectCV(selectedCV)}>
             Reject
           </Button>
         </div>

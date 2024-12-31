@@ -84,6 +84,12 @@ const Profile = () => {
               <p className="text-blue-700 font-medium">{cv.filename}</p>
               <Badge text={cv.status} color={statusColors[cv.status]} className="capitalize" />
             </div>
+            {cv.status === "rejected" && (
+              <p className="text-red-500 my-2">
+                <span className="text-black font-medium">Reason: </span>
+                {`${cv.rejectionReason}. Upload a new CV to apply again.`}
+              </p>
+            )}
             <iframe
               src={`${import.meta.env.VITE_INTERNCONNECT_API_BASE_URL}/${cv.path}`}
               title="CV Preview"

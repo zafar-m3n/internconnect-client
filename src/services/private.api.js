@@ -47,9 +47,10 @@ const getAllCvs = async (page, limit, search = "", sortBy = "date", batchCode = 
   });
 };
 
+// Approve CV API Call
 const approveCv = async (id) => {
-  return await instance.client.put(
-    `api/v1/cv/admin/${id}/approve`,
+  return await instance.client.post(
+    `api/v1/cv/admin/cv/${id}/approve`,
     {},
     {
       headers: instance.defaultHeaders(),
@@ -57,10 +58,10 @@ const approveCv = async (id) => {
   );
 };
 
-const rejectCv = async (id) => {
-  return await instance.client.put(
-    `api/v1/cv/admin/${id}/reject`,
-    {},
+const rejectCv = async (id, reason) => {
+  return await instance.client.post(
+    `api/v1/cv/admin/cv/${id}/reject`,
+    { reason },
     {
       headers: instance.defaultHeaders(),
     }
