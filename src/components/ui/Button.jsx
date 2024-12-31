@@ -28,17 +28,17 @@ const Button = ({
     danger: "bg-red-500 text-white border-red-500 hover:bg-red-600 hover:border-red-600",
     info: "bg-cyan-500 text-white border-cyan-500 hover:bg-cyan-600 hover:border-cyan-600",
     dark: "bg-gray-800 text-white border-gray-800 hover:bg-gray-900 hover:border-gray-900",
-    light: "bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200 hover:border-gray-400",
+    light: "bg-gray-100 text-gray-800 border-gray-100 hover:bg-gray-200 hover:border-gray-200",
   };
 
   const outlineClasses = {
-    primary: "text-blue-500 border-blue-500 hover:bg-blue-50",
-    success: "text-green-500 border-green-500 hover:bg-green-50",
-    warning: "text-yellow-500 border-yellow-500 hover:bg-yellow-50",
-    danger: "text-red-500 border-red-500 hover:bg-red-50",
-    info: "text-cyan-500 border-cyan-500 hover:bg-cyan-50",
-    dark: "text-gray-800 border-gray-800 hover:bg-gray-100",
-    light: "text-gray-800 border-gray-300 hover:bg-gray-200",
+    primary: "text-blue-500 border-blue-500 hover:bg-blue-500 hover:text-white",
+    success: "text-green-500 border-green-500 hover:bg-green-500 hover:text-white",
+    warning: "text-yellow-500 border-yellow-500 hover:bg-yellow-500 hover:text-white",
+    danger: "text-red-500 border-red-500 hover:bg-red-500 hover:text-white",
+    info: "text-cyan-500 border-cyan-500 hover:bg-cyan-500 hover:text-white",
+    dark: "text-gray-800 border-gray-800 hover:bg-gray-800 hover:text-white",
+    light: "text-gray-800 border-gray-300 hover:bg-gray-300 hover:text-gray-800",
   };
 
   return (
@@ -48,11 +48,7 @@ const Button = ({
       onClick={onClick}
       className={`${className} inline-flex items-center justify-center border font-medium rounded-md transition duration-300 ${
         variant === "outline" ? outlineClasses[color] : colorClasses[color]
-      } ${sizeClasses[size]} ${
-        disabled
-          ? "opacity-50 cursor-not-allowed"
-          : "hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-      }`}
+      } ${sizeClasses[size]} ${disabled && "opacity-50 cursor-not-allowed"}`}
     >
       {loading && (
         <svg

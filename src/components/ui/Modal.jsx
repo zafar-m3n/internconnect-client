@@ -41,7 +41,9 @@ const Modal = ({
           />
         </Transition.Child>
 
-        <div className={`fixed inset-0 flex ${centered ? "items-center" : "items-start pt-[60px]"} justify-center px-4`}>
+        <div
+          className={`fixed inset-0 flex ${centered ? "items-center" : "items-start pt-[60px]"} justify-center px-4`}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -52,20 +54,16 @@ const Modal = ({
             leaveTo="opacity-0 scale-95"
           >
             <Dialog.Panel
-              className={`relative bg-white rounded-lg shadow-xl overflow-hidden w-full ${sizeClasses[size]} ${modalClass}`}
+              className={`bg-white rounded-lg shadow-xl overflow-hidden w-full ${sizeClasses[size]} ${modalClass}`}
             >
-              {closeButton && (
-                <button
-                  onClick={onClose}
-                  className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
-                >
-                  <span className="sr-only">Close</span>✕
-                </button>
-              )}
-
-              {title && (
-                <Dialog.Title className="text-lg font-medium text-gray-900 px-6 py-4 border-b">{title}</Dialog.Title>
-              )}
+              <div className="flex items-center justify-between py-4 px-6 border-b">
+                {title && <Dialog.Title className="text-lg font-medium text-gray-900">{title}</Dialog.Title>}
+                {closeButton && (
+                  <button onClick={onClose} className="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <span className="sr-only">Close</span>✕
+                  </button>
+                )}
+              </div>
               <div className="px-6 py-4">{children}</div>
               {footer && <div className="px-6 py-4 border-t">{footer}</div>}
             </Dialog.Panel>

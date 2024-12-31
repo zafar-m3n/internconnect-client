@@ -6,6 +6,7 @@ import Pagination from "@/components/ui/Pagination";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
+import Modal from "@/components/ui/Modal";
 import { formatName } from "@/utils/formatName";
 import { formatCB } from "@/utils/formatCB";
 
@@ -17,6 +18,10 @@ const CVPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("date");
   const [selectedBatch, setSelectedBatch] = useState(null);
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+  const [selectedCV, setSelectedCV] = useState(null);
+  const [rejectReason, setRejectReason] = useState("");
 
   const batches = [
     { label: "IF2361", value: "IF2361" },
@@ -59,22 +64,36 @@ const CVPage = () => {
     getAllCvs(page, 10, searchQuery, sortBy, selectedBatch);
   };
 
-  const viewCv = (cv) => {
-    const url = `${import.meta.env.VITE_INTERNCONNECT_API_BASE_URL}/${cv.path}`;
-    return () => {
-      window.open(url, "_blank");
-    };
+  const openApproveModal = (cv) => {
+    setSelectedCV(cv);
+    setIsApproveModalOpen(true);
   };
 
-  useEffect(() => {
-    getAllCvs();
-  }, []);
+  const openRejectModal = (cv) => {
+    setSelectedCV(cv);
+    setIsRejectModalOpen(true);
+  };
+
+  const closeModals = () => {
+    setIsApproveModalOpen(false);
+    setIsRejectModalOpen(false);
+    setRejectReason("");
+  };
+
+  const viewCv = (cv) => () => {
+    const url = `${import.meta.env.VITE_INTERNCONNECT_API_BASE_URL}/${cv.path}`;
+    window.open(url, "_blank");
+  };
 
   const statusColors = {
     pending: "yellow",
     approved: "green",
     rejected: "red",
   };
+
+  useEffect(() => {
+    getAllCvs();
+  }, []);
 
   return (
     <div className="p-6 bg-white rounded-md shadow-md">
@@ -139,10 +158,10 @@ const CVPage = () => {
                   <td className="border border-gray-200 px-4 py-2 space-x-2">
                     {cv.status === "pending" && (
                       <>
-                        <Button variant="outline" color="success" size="sm" className="inline-block">
+                        <Button variant="outline" color="success" size="sm" onClick={() => openApproveModal(cv)}>
                           Approve
                         </Button>
-                        <Button variant="outline" color="danger" size="sm" className="inline-block">
+                        <Button variant="outline" color="danger" size="sm" onClick={() => openRejectModal(cv)}>
                           Reject
                         </Button>
                       </>
@@ -166,6 +185,42 @@ const CVPage = () => {
       <div className="flex justify-end mt-6">
         <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       </div>
+      <Modal isOpen={isApproveModalOpen} onClose={closeModals} title="Approve CV">
+        <p>Are you sure you want to accept the CV for {selectedCV && formatName(selectedCV.user.name)}?</p>
+        <div className="flex justify-end space-x-2 mt-4">
+          <Button color="light" size="sm" onClick={closeModals}>
+            Cancel
+          </Button>
+          <Button color="success" size="sm">
+            Confirm
+          </Button>
+        </div>
+      </Modal>
+      <Modal isOpen={isRejectModalOpen} onClose={closeModals} title="Reject CV">
+        <p>Are you sure you want to reject the CV for {selectedCV && formatName(selectedCV.user.name)}?</p>
+        <div className="mt-4">
+          <label htmlFor="rejectReason" className="block text-sm font-medium text-gray-700">
+            Reason
+          </label>
+          <input
+            type="text"
+            id="rejectReason"
+            value={rejectReason}
+            onChange={(e) => setRejectReason(e.target.value)}
+            className="mt-1 px-4 py-2 border border-gray-300 rounded-md focus:border-gray-500 focus:outline-none w-full"
+            placeholder="Enter the reason for rejection"
+            required
+          />
+        </div>
+        <div className="flex justify-end space-x-2 mt-4">
+          <Button color="light" size="sm" onClick={closeModals}>
+            Cancel
+          </Button>
+          <Button color="danger" size="sm" disabled={!rejectReason}>
+            Reject
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
